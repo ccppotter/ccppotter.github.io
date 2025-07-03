@@ -19,6 +19,18 @@
             padding-top: 70px;
         }
 
+        @keyframes spark-glow {
+            0% {
+                box-shadow: 0 0 5px rgba(255, 215, 0, 0.2), 0 0 10px rgba(255, 165, 0, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 69, 0, 0.8);
+            }
+            100% {
+                box-shadow: 0 0 5px rgba(255, 215, 0, 0.2), 0 0 10px rgba(255, 165, 0, 0.2);
+            }
+        }
+
         /* Navigation */
         .navbar {
             background: rgba(255,255,255,0.98) !important;
@@ -232,18 +244,6 @@
             .back-btn {
                 width: 100%;
                 justify-content: center;
-            }
-        }
-
-        @keyframes spark-glow {
-            0% {
-                box-shadow: 0 0 5px rgba(255, 215, 0, 0.2), 0 0 10px rgba(255, 165, 0, 0.2);
-            }
-            50% {
-                box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 69, 0, 0.8);
-            }
-            100% {
-                box-shadow: 0 0 5px rgba(255, 215, 0, 0.2), 0 0 10px rgba(255, 165, 0, 0.2);
             }
         }
 
