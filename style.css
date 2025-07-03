@@ -19,6 +19,7 @@
             padding-top: 70px;
         }
 
+        // 加上邊框火焰動畫
         @keyframes flicker {
               0% { box-shadow: 0 0 5px rgba(255,69,0,0.5); }
               50% { box-shadow: 0 0 25px rgba(255,140,0,0.9); }
