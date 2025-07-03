@@ -19,16 +19,10 @@
             padding-top: 70px;
         }
 
-        @keyframes spark-glow {
-            0% {
-                box-shadow: 0 0 5px rgba(255, 215, 0, 0.2), 0 0 10px rgba(255, 165, 0, 0.2);
-            }
-            50% {
-                box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 69, 0, 0.8);
-            }
-            100% {
-                box-shadow: 0 0 5px rgba(255, 215, 0, 0.2), 0 0 10px rgba(255, 165, 0, 0.2);
-            }
+        @keyframes flicker {
+              0% { box-shadow: 0 0 5px rgba(255,69,0,0.5); }
+              50% { box-shadow: 0 0 25px rgba(255,140,0,0.9); }
+              100% { box-shadow: 0 0 10px rgba(255,69,0,0.6); }
         }
 
         /* Navigation */
@@ -176,7 +170,12 @@
 
         .gallery-item:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            // box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, red, orange, yellow, red) 1;
+            animation: flicker 0.3s infinite alternate;
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.8);                    
         }
 
         .gallery-item img {
@@ -187,13 +186,7 @@
         }
 
         .gallery-item:hover img {
-            // transform: scale(1.05);
-            transform: scale(1.05); translateY(-10px);
-            // transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            animation: spark-glow 1s infinite;  /* ✨ 新增 */
-            border: 2px solid transparent;
-            border-image: linear-gradient(45deg, gold, orange, red, gold) 1;              
+            transform: scale(1.05);      
         }
 
         .gallery-overlay {
