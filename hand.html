@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teachable Machine Webcam Classifier</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #webcam-container {
+            margin: 20px auto;
+            border: 5px solid #ccc;
+            width: fit-content;
+            border-radius: 10px;
+            background: white;
+        }
+
+        canvas {
+            border-radius: 5px;
+        }
+
+        .button-group {
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #label-container {
+            margin-top: 20px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .label-bar {
+            margin: 10px 0;
+            text-align: left;
+        }
+
+        .bar {
+            height: 20px;
+            border-radius: 5px;
+            background-color: gray;
+            transition: width 0.3s ease;
+        }
+
+        .label-text {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Teachable Machine Webcam Classifier</h1>
+<div class="button-group">
+    <button onclick="startWebcam()">Start Webcam</button>
+    <button onclick="stopWebcam()">Stop Webcam</button>
+</div>
+<div id="webcam-container"></div>
+<div id="label-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+<script type="text/javascript">
+    const URL = "https://teachablemachine.withgoogle.com/models/ktArkwXcj/";
+    let model, webcam, labelContainer, maxPredictions;
+    let running = false;
+
+    async function startWebcam() {
+        if (running) return;
+        running = true;
+
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        webcam = new tmImage.Webcam(400, 300, true); // larger webcam
+        await webcam.setup();
+        await webcam.play();
+        window.requestAnimationFrame(loop);
+        document.getElementById("webcam-container").innerHTML = "";
+        document.getElementById("webcam-container").appendChild(webcam.canvas);
+
+        labelContainer = document.getElementById("label-container");
+        labelContainer.innerHTML = "";
+        for (let i = 0; i < maxPredictions; i++) {
+            const labelDiv = document.createElement("div");
+            labelDiv.className = "label-bar";
+
+            const labelText = document.createElement("div");
+            labelText.className = "label-text";
+
+            const bar = document.createElement("div");
+            bar.className = "bar";
+            bar.style.width = "0%";
+
+            labelDiv.appendChild(labelText);
+            labelDiv.appendChild(bar);
+            labelContainer.appendChild(labelDiv);
+        }
+    }
+
+    function stopWebcam() {
+        if (webcam && webcam.stop) {
+            webcam.stop();
+        }
+        running = false;
+    }
+
+    async function loop() {
+        if (!running) return;
+        webcam.update();
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    async function predict() {
+        const prediction = await model.predict(webcam.canvas);
+
+        // 排序找出最大與次大
+        const sorted = [...prediction].sort((a, b) => b.probability - a.probability);
+        const top1 = sorted[0].className;
+        const top2 = sorted[1]?.className;
+
+        for (let i = 0; i < maxPredictions; i++) {
+            const className = prediction[i].className;
+            const prob = prediction[i].probability;
+            const percent = (prob * 100).toFixed(1) + "%";
+
+            const labelBar = labelContainer.childNodes[i];
+            const labelText = labelBar.childNodes[0];
+            const bar = labelBar.childNodes[1];
+
+            labelText.innerHTML = `${className}: ${prob.toFixed(2)}`;
+            bar.style.width = `${prob * 100}%`;
+
+            if (className === top1) {
+                bar.style.backgroundColor = "red";
+            } else if (className === top2) {
+                bar.style.backgroundColor = "orange";
+            } else {
+                bar.style.backgroundColor = "gray";
+            }
+        }
+    }
+</script>
+</body>
+</html>
