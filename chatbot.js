@@ -583,7 +583,7 @@ class ChatBot {
         if (recentHistory.length === 0) {
             // 如果沒有歷史記錄，顯示歡迎訊息
             setTimeout(() => {
-                this.addMessage('你好，我是AI助教v4！有什麼關於欒斌教授或AI課程的問題想要問我嗎？', 'ai');
+                this.addMessage('你好，我是AI助教v4！有什麼關於賴資安長或AI課程的問題想要問我嗎？', 'ai');
             }, 1000);
         }
     }
