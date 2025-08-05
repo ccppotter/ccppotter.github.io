@@ -365,7 +365,7 @@ class ChatBot {
 
                     <div class="chat-messages" id="chatMessages">
                         <div class="message system">
-                            歡迎使用 AI 助教！我可以回答您關於欒斌教授或AI課程的任何問題。
+                            歡迎使用 AI 助教！我可以回答您關於賴資安長或AI課程的任何問題。
                         </div>
                     </div>
 
